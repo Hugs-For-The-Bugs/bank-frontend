@@ -1,5 +1,8 @@
 <template>
     <div class="position-absolute top-50 start-50 translate-middle p-3" style="width: 20rem;">
+      <div class="alert alert-success" role="alert" v-show="showAlert" >
+          Login Success.
+      </div>
         <form class="form-control" @submit.prevent="login">
             <h3 class="text-center">Login</h3>
             <div class="mb-3 mt-4">
@@ -25,16 +28,38 @@
 <script setup lang="ts">
 import axios from 'axios';
 import { ref } from 'vue';
+import { store } from '@/store'
+import { useRouter } from "vue-router";
+
 
 const socialSecurityNumber = ref('');
 const password = ref('');
+const router = useRouter();
 
-const login = async () => {
-    const response = await axios.post('/api/login', {
-        socialSecurityNumber: socialSecurityNumber.value,
-        password: password.value
+let showAlert = false;
+
+function login() {
+    axios({
+        method: 'post',
+        url: '/api/login',
+        data: {
+            socialSecurityNumber: socialSecurityNumber.value,
+            password: password.value
+        }
+    })
+    .then(function (response) {
+        console.log(response);
+        if (response.data.code == 0) {
+            store.userID = response.data.id;
+            console.log(response.data.id)
+            store.login = true;
+            showAlert = true;
+            router.push({ name: "AccountDetails" });
+        }
+    })
+    .catch(function (error) {
+        console.log(error);
     });
-    console.log(response);
 }
 
 
