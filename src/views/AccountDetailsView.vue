@@ -19,15 +19,22 @@
     
     </div>
 
-
-
-
-
-
-
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
+
+
+const accountDetails = ref({
+    id: 0,
+    socialSecurityNumber: "string",
+    firstName: "string",
+    surname: "string",
+    birthday: "string",
+    phone: "string",
+    email: "string",
+    balance: 0
+})
 
 </script>
 
