@@ -1,7 +1,7 @@
 import { reactive } from "vue";
 
 export const store = reactive({
-    login: true,
+    login: false,
     userLogin() {
         this.login = true;
     },
