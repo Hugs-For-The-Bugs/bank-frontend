@@ -20,7 +20,6 @@
 </template>
 
 <script setup lang="ts">
-import { store } from '@/store';
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
 
@@ -42,7 +41,7 @@ onMounted(() => {
 function getAccountDetails() {
     axios({
         method: 'get',
-        url: '/api/account/' + store.userID,
+        url: '/api/account',
     })
     .then(response => {
         accountDetails.value = response.data;
@@ -54,4 +53,4 @@ function getAccountDetails() {
 
 </script>
 
-<style scoped></style>
+<style scoped></style>@/util

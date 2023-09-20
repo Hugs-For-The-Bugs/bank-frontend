@@ -28,8 +28,8 @@
 <script setup lang="ts">
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
-import { store } from '@/store'
 import { useRouter, useRoute } from "vue-router";
+import { loggedIn } from '@/model';
 
 
 const socialSecurityNumber = ref('');
@@ -54,20 +54,17 @@ function login() {
             password: password.value
         }
     })
-    .then(function (response) {
-        console.log(response);
-        if (response.status == 200) {
-            store.userID = response.data.id;
-            console.log(response.data.id)
-            store.login = true;
+        .then(function (response) {
+            console.log(response);
             router.push({ name: "AccountDetails" });
-        }
-    })
-    .catch(function (error) {
-        console.log(error);
-    });
+            loggedIn.value = true;
+
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
 }
 
 </script>
 
-<style scoped></style>
+<style scoped></style>@/util

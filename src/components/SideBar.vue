@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { RouterLink, useRouter } from 'vue-router'
+import { onMounted, onUpdated, ref } from 'vue';
+import { RouterLink, useRouter, useRoute } from 'vue-router'
 const router = useRouter()
-
+const route = useRoute()
 
 </script>
 
 <template>
-  <nav class="nav nav-pills flex-column sticky-top sticky-left m-2 p-2 border rounded" style="width: 15rem">
+  <nav v-show="!(route.path === '/home' || route.path === '/login' || route.path === '/create-account')" class="nav nav-pills flex-column sticky-top sticky-left m-2 p-2 border rounded" style="width: 15rem">
     <RouterLink to="/account-details" class="nav-link" v-bind:class="{ active: router.currentRoute.value.path == '/account-details' }">Account Details</RouterLink>
     <RouterLink to="/transfer" class="nav-link" v-bind:class="{ active: router.currentRoute.value.path == '/transfer' }">Transfer</RouterLink>
     <RouterLink to="/withdraw" class="nav-link" v-bind:class="{ active: router.currentRoute.value.path == '/withdraw' }">Withdraw</RouterLink>

@@ -1,15 +1,34 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router'
+import { RouterView, useRouter } from 'vue-router'
 import NavBar from './components/NavBar.vue'
 import SideBar from './components/SideBar.vue';
-import { store } from './store'
+import axios from 'axios';
+import { onBeforeMount, onMounted } from 'vue';
+import { loggedIn } from './model'
+
+const router = useRouter()
+
+onBeforeMount(() => {
+  console.log("before mounted")
+  if (document.cookie.includes('SESSIONID')) {
+    loggedIn.value = true
+    router.replace({ name: "AccountDetails" })
+  }
+  else {
+    loggedIn.value = false
+    router.replace({ name: "Home" })
+  }
+
+})
+
+
 
 </script>
 
 <template>
   <NavBar />
   <div class="d-flex">
-    <SideBar v-if="store.login" />
+    <SideBar />
     <RouterView />
   </div>
 </template>
