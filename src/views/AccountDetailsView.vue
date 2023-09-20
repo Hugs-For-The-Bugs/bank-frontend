@@ -1,6 +1,6 @@
 <template>
     <!-- <div class="w-100" style="background-color: grey">AccountDetails</div> -->
-    <div class="flex-column sticky-top sticky-center m-2 p-2 w-100">
+    <div class="flex-column sticky-top sticky-center p-2 w-100">
         <div class="container-sm border-1">
             <h2 class="text-center text-bg-primary">Account Overview</h2>
             <div class="mb-3 mt-4">
@@ -15,7 +15,6 @@
             <li class="list-group-item" style="width: 30rem;">Phone Number: <span class="text-primary">{{ accountDetails.phone }}</span></li>
             <li class="list-group-item" style="width: 30rem;">Email: <span class="text-primary">{{ accountDetails.email }}</span></li>
         </ul>
-
     </div>
 </template>
 
