@@ -6,7 +6,7 @@ import { store } from '../store'
 <template>
   <div>
     <nav class="navbar navbar-expand-lg bg-light sticky-top px-4 d-flex justify-content-between">
-      <a class="navbar-brand" href="#">The Bank</a>
+      <RouterLink v-if="!store.login" to="/home" class="navbar-brand text-primary">The Agile Bank</RouterLink>
       <div>
         <RouterLink v-if="!store.login" to="/login" class="btn">Login</RouterLink>
         <RouterLink v-if="!store.login" to="/create-account" class="btn ">Create Account</RouterLink>
