@@ -44,7 +44,6 @@
                 <button type="submit" class="btn btn-primary position-absolute bottom-0 end-0">Create Account</button>
             </div>
             <div class="alert alert-danger" role="alert" v-show="showError">
-                Account already exists
                 {{ message }}
             </div>
         </form>
