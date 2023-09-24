@@ -1,0 +1,69 @@
+@startuml
+!define RECTANGLE class
+
+package "Vuejs Frontend" {
+  RECTANGLE mainAlias as "main.ts" {
+    +main()
+  }
+
+  RECTANGLE AppVue as "App.vue"
+
+  package "components" {
+    RECTANGLE NavBar as "NavBar"
+    RECTANGLE SideBar as "SideBar"
+    RECTANGLE TransactionTable as "TransactionTable"
+  }
+
+  package "views" {
+    left to right direction
+    RECTANGLE HomeView as "HomeView"
+    RECTANGLE LoginView as "LoginView"
+    RECTANGLE CreateAccountView as "CreateAccountView"
+    RECTANGLE TransactionHistoryView as "TransactionHistoryView"
+    RECTANGLE AccountDetailsView as "AccountDetailsView"
+    RECTANGLE TransferView as "TransferView"
+    RECTANGLE AccountListView as "AccountListView"
+    RECTANGLE AdminAccountDetailsView as "AdminAccountDetailsView"
+    RECTANGLE AdminDashboardView as "AdminDashboardView"
+    RECTANGLE AdminLoginView as "AdminLoginView"
+  }
+
+  package "router" {
+    RECTANGLE routerIndexAlias as "index.ts" {
+      +routes: Route[]
+    }
+  }
+
+  package "store" {
+    RECTANGLE storeIndexAlias as "index.ts" {
+      +state: Object
+      +mutations: Object
+      +actions: Object
+    }
+  }
+
+  package "assets" {
+    RECTANGLE images as "images"
+    RECTANGLE styles as "styles"
+  }
+}
+
+mainAlias --> AppVue
+mainAlias --> styles
+AppVue --> routerIndexAlias
+AppVue --> storeIndexAlias
+routerIndexAlias --> HomeView
+routerIndexAlias --> LoginView
+routerIndexAlias --> CreateAccountView
+routerIndexAlias --> TransactionHistoryView
+routerIndexAlias --> AccountDetailsView
+routerIndexAlias --> TransferView
+routerIndexAlias --> AccountListView
+routerIndexAlias --> AdminDashboardView
+routerIndexAlias --> AdminLoginView
+AppVue --> NavBar
+AppVue --> SideBar
+TransactionHistoryView --> TransactionTable
+AdminAccountDetailsView --> TransactionTable
+
+@enduml
