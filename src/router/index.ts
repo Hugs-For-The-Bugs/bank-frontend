@@ -4,8 +4,6 @@ import HomeView from '../views/HomeView.vue'
 import CreateAccountView from '../views/CreateAccountView.vue'
 import LoginView from '../views/LoginView.vue'
 import TransferView from '../views/TransferView.vue'
-import WithdrawView from '../views/WithdrawView.vue'
-import DepositView from '../views/DepositView.vue'
 import SettingsView from '../views/SettingsView.vue'
 
 const router = createRouter({
@@ -40,16 +38,6 @@ const router = createRouter({
       path: '/transfer',
       name: 'Transfer',
       component: TransferView
-    },
-    {
-      path: '/withdraw',
-      name: 'Withdraw',
-      component: WithdrawView
-    },
-    {
-      path: '/deposit',
-      name: 'Deposit',
-      component: DepositView
     },
     {
       path: '/settings',
