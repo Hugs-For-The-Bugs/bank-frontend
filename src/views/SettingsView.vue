@@ -31,12 +31,29 @@
       </div>
     </form>
   </div>
+<!--  Modal-->
+  <div class="modal" id="alertModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Success</h5>
+        </div>
+        <div class="modal-body">
+          <p>The change has been saved.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" @click="redirect">Dismiss</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
     
 <script setup lang="ts">
 import axios from 'axios';
 import { useRouter } from 'vue-router';
-import { onBeforeMount, reactive, ref } from 'vue';
+import {onBeforeMount, onMounted, reactive, ref} from 'vue';
+import * as bootstrap from 'bootstrap';
 
 const firstName = ref('');
 const surname = ref('');
@@ -47,11 +64,13 @@ const socialSecurityNumber = ref('');
 const pass1 = ref('');
 const pass2 = ref('');
 const router = useRouter();
-const passwordequal = ref(false)
+const password_equal = ref(false)
 const showError = ref(false);
 const accountExists = ref(false);
 const serverError = ref(false);
 const message = ref('');
+
+let modal: bootstrap.Modal;
 
 onBeforeMount(() => {
   axios({
@@ -77,6 +96,10 @@ onBeforeMount(() => {
       });
 })
 
+onMounted(() => {
+  modal = new bootstrap.Modal(document.getElementById('alertModal')!);
+})
+
 function account() {
   axios({
     method: 'put',
@@ -92,7 +115,7 @@ function account() {
   })
       .then(function (response) {
         console.log(response);
-        router.push({ name: "AccountDetails"})
+        showAlertModal()
       })
       .catch(function (error) {
         console.log(error);
@@ -103,6 +126,15 @@ function account() {
           message.value = error.response.data.msg;
         }
       });
+}
+
+function showAlertModal() {
+  modal.show();
+}
+
+function redirect() {
+  modal.hide()
+  router.push({ name: "AccountDetails" })
 }
 
 </script>
