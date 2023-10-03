@@ -34,9 +34,9 @@
             </div>
             <div class="mb-3">
                 <label for="exampleFormControlInput2" class="form-label">Confirm Password</label>
-                <input type="password" class="form-control" :class="!passwordequal && pass1 && pass2 ? 'border-danger' : ''"
+                <input type="password" class="form-control" :class="!password_equal && pass1 && pass2 ? 'border-danger' : ''"
                     @keyup="validatePassword" name="pass2" v-model="pass2" required />
-                <p v-show="!passwordequal && pass1 && pass2" class="m-0 p-0 text-danger">
+                <p v-show="!password_equal && pass1 && pass2" class="m-0 p-0 text-danger">
                     Password does not match
                 </p>
             </div>
@@ -64,18 +64,16 @@ const socialSecurityNumber = ref('');
 const pass1 = ref('');
 const pass2 = ref('');
 const router = useRouter();
-const passwordequal = ref(false)
+const password_equal = ref(false)
 const showError = ref(false);
-const accountExists = ref(false);
-const serverError = ref(false);
 const message = ref('');
 
 function validatePassword() {
     if (pass1.value === pass2.value) {
-        passwordequal.value = true
+        password_equal.value = true
     }
     else {
-        passwordequal.value = false
+        password_equal.value = false
     }
 }
 
