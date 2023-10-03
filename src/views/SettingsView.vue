@@ -54,8 +54,8 @@
   />
   <Modal
       ref="deactivateAccountCompleteModal"
-      title="{{ deactivateAccountStatus }}"
-      content="{{ deactivateAccountMessage }}"
+      :title="deactivateAccountStatus"
+      :content="deactivateAccountMessage"
       :cancellable="false"
       @confirm="confirmDeactivateAccountComplete"
   />
@@ -172,7 +172,7 @@ function cancelDeactivateAccount() {
 
 function confirmDeactivateAccountComplete() {
   deactivateAccountCompleteModal.value.hide()
-  router.push({name: "Home"})
+  window.location.reload()
 }
 
 </script>
