@@ -1,59 +1,72 @@
 <template>
 
-  <div class="d-flex sticky-top justify-content-center m-2 p-2 w-100">
-    <form class="form-control" @submit.prevent="account" style="width: 30rem">
-      <h3 class="text-center">Edit Account</h3>
+  <div class="d-flex sticky-top justify-content-center w-100">
+    <form class="form-control m-2" @submit.prevent="editAccount" style="width: 30rem">
+      <h3 class="text">Edit Account</h3>
       <div class="mb-3 mt-4">
         <label for="exampleFormControlInput1" class="form-label">First Name</label>
-        <input type="text" class="form-control" name="firstName" v-model="firstName" required />
+        <input type="text" class="form-control" name="firstName" v-model="firstName" required/>
       </div>
       <div class="mb-3 mt-4">
         <label for="exampleFormControlInput1" class="form-label">Surname</label>
-        <input type="text" class="form-control" name="surname" v-model="surname" required />
+        <input type="text" class="form-control" name="surname" v-model="surname" required/>
       </div>
       <div class="mb-3 mt-4">
         <label for="exampleFormControlInput1" class="form-label">Birthday</label>
-        <input type="date" class="form-control" name="birthday" v-model="birthday" required />
+        <input type="date" class="form-control" name="birthday" v-model="birthday" required/>
       </div>
       <div class="mb-3 mt-4">
         <label for="exampleFormControlInput1" class="form-label">Phone</label>
-        <input type="text" class="form-control" name="phone" v-model="phone" required />
+        <input type="text" class="form-control" name="phone" v-model="phone" required/>
       </div>
       <div class="mb-3 mt-4">
         <label for="exampleFormControlInput1" class="form-label">Email</label>
-        <input type="email" class="form-control" name="email" v-model="email" required />
+        <input type="email" class="form-control" name="email" v-model="email" required/>
       </div>
-      <div class="mb-3 position-relative p-3">
-        <button type="submit" class="btn btn-primary position-absolute bottom-0 end-0">Update</button>
-      </div>
+      <button type="submit" class="btn btn-primary my-2">Update Account</button>
       <div class="alert alert-danger" role="alert" v-show="showError">
         {{ message }}
       </div>
     </form>
-  </div>
-<!--  Modal-->
-  <div class="modal" id="alertModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Success</h5>
-        </div>
-        <div class="modal-body">
-          <p>The change has been saved.</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" @click="redirect">Dismiss</button>
-        </div>
+    <div>
+      <div class="form-control m-2" style="width: 30rem">
+        <h3 class="text">Deactivate Account</h3>
+        <button type="button" class="btn btn-danger my-2" @click="deactivateAccount">Deactivate Account</button>
       </div>
+      <div class="h-100"></div>
     </div>
   </div>
+  <!--  Modal-->
+  <Modal
+      ref="editAccountModal"
+      title="Account Updated"
+      content="Your account information has been updated successfully."
+      :cancellable="false"
+      @confirm="confirmEditAccount"
+  />
+  <Modal
+      ref="deactivateAccountModal"
+      title="Warning"
+      content="This action will deactivate your account. Are you sure?"
+      :cancellable="true"
+      @confirm="confirmDeactivateAccount"
+      @cancel="cancelDeactivateAccount"
+  />
+  <Modal
+      ref="deactivateAccountCompleteModal"
+      title="{{ deactivateAccountStatus }}"
+      content="{{ deactivateAccountMessage }}"
+      :cancellable="false"
+      @confirm="confirmDeactivateAccountComplete"
+  />
+
 </template>
-    
+
 <script setup lang="ts">
 import axios from 'axios';
-import { useRouter } from 'vue-router';
-import {onBeforeMount, onMounted, reactive, ref} from 'vue';
-import * as bootstrap from 'bootstrap';
+import {useRouter} from 'vue-router';
+import {onBeforeMount, ref} from 'vue';
+import Modal from "@/components/Modal.vue";
 
 const firstName = ref('');
 const surname = ref('');
@@ -61,16 +74,16 @@ const birthday = ref('');
 const phone = ref('');
 const email = ref('');
 const socialSecurityNumber = ref('');
-const pass1 = ref('');
-const pass2 = ref('');
 const router = useRouter();
-const password_equal = ref(false)
 const showError = ref(false);
-const accountExists = ref(false);
-const serverError = ref(false);
 const message = ref('');
 
-let modal: bootstrap.Modal;
+let editAccountModal = ref();
+let deactivateAccountModal = ref();
+let deactivateAccountCompleteModal = ref();
+
+let deactivateAccountStatus = ref('');
+let deactivateAccountMessage = ref('');
 
 onBeforeMount(() => {
   axios({
@@ -96,11 +109,7 @@ onBeforeMount(() => {
       });
 })
 
-onMounted(() => {
-  modal = new bootstrap.Modal(document.getElementById('alertModal')!);
-})
-
-function account() {
+function editAccount() {
   axios({
     method: 'put',
     url: '/api/account',
@@ -115,7 +124,7 @@ function account() {
   })
       .then(function (response) {
         console.log(response);
-        showAlertModal()
+        editAccountModal.value.show()
       })
       .catch(function (error) {
         console.log(error);
@@ -128,15 +137,44 @@ function account() {
       });
 }
 
-function showAlertModal() {
-  modal.show();
+function deactivateAccount() {
+  deactivateAccountModal.value.show()
 }
 
-function redirect() {
-  modal.hide()
-  router.push({ name: "AccountDetails" })
+function confirmEditAccount() {
+  editAccountModal.value.hide()
+  router.push({name: "AccountDetails"})
+}
+
+function confirmDeactivateAccount() {
+  deactivateAccountModal.value.hide()
+  axios({
+    method: 'delete',
+    url: '/api/account'
+  })
+      .then(function (response) {
+        console.log(response);
+        deactivateAccountStatus.value = 'Account Deactivated';
+        deactivateAccountMessage.value = 'Your account has been deactivated successfully.';
+        deactivateAccountCompleteModal.value.show()
+      })
+      .catch(function (error) {
+        console.log(error);
+        deactivateAccountStatus.value = 'Error';
+        deactivateAccountMessage.value = error.response.data.msg;
+        deactivateAccountCompleteModal.value.show()
+      })
+}
+
+function cancelDeactivateAccount() {
+  deactivateAccountModal.value.hide()
+}
+
+function confirmDeactivateAccountComplete() {
+  deactivateAccountCompleteModal.value.hide()
+  router.push({name: "Home"})
 }
 
 </script>
-    
+
 <style scoped></style>
