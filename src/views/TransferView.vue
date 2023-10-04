@@ -6,8 +6,8 @@
         <h5 class="text">Current Balance: {{ accountDetails.balance }}</h5>
       </div>
       <div class="mb-3 mt-4">
-        <label for="exampleFormControlInput1" class="form-label">Target Account</label>
-        <input type="text" class="form-control" name="firstName" v-model="targetAccount" required/>
+        <label for="exampleFormControlInput1" class="form-label">Target Account Phone Number</label>
+        <input type="text" class="form-control" name="firstName" v-model="targetPhoneNumber" required/>
       </div>
       <div class="mb-3 mt-4">
         <label for="exampleFormControlInput1" class="form-label">Amount</label>
@@ -34,7 +34,7 @@ import axios from 'axios';
 import {onBeforeMount, ref} from 'vue';
 import Modal from "@/components/Modal.vue";
 
-const targetAccount = ref('');
+const targetPhoneNumber = ref('');
 const amount = ref('');
 const showError = ref(false);
 const message = ref('');
@@ -73,7 +73,7 @@ function transfer() {
     method: 'post',
     url: '/api/transfer',
     data: {
-      targetAccount: targetAccount.value,
+      targetPhoneNumber: targetPhoneNumber.value,
       amount: amount.value
     }
   })
