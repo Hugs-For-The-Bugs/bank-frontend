@@ -61,9 +61,8 @@ function login() {
     })
         .then(function (response) {
             console.log(response);
-            router.push({ name: "AccountDetails" });
             loggedIn.value = true;
-
+            window.location.reload()
         })
         .catch(function (error) {
             console.log(error);
