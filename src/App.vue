@@ -2,8 +2,7 @@
 import { RouterView, useRouter } from 'vue-router'
 import NavBar from './components/NavBar.vue'
 import SideBar from './components/SideBar.vue';
-import axios from 'axios';
-import { onBeforeMount, onMounted } from 'vue';
+import { onBeforeMount } from 'vue';
 import { loggedIn } from './model'
 
 const router = useRouter()
