@@ -71,10 +71,10 @@ onBeforeMount(() => {
 function transfer() {
   axios({
     method: 'post',
-    url: '/api/transfer',
+    url: '/api/transaction',
     data: {
       targetPhoneNumber: targetPhoneNumber.value,
-      amount: amount.value
+      amount: Number(amount.value)
     }
   })
   .then(response => {

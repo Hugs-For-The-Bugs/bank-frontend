@@ -33,17 +33,19 @@
       <div class="card mb-3" v-for="transaction in transactions">
         <div class="card-body d-flex justify-content-between">
           <div>
-            <p v-if="accountDetails.socialSecurityNumber === transaction.from_social_security_number">
-              Transfer to {{ transaction.to_social_security_number }}
+            <p v-if="accountDetails.socialSecurityNumber === transaction.from_phone">
+              Transfer to {{ transaction.to_phone }}
             </p>
-            <p v-else>Transfer from {{ transaction.from_social_security_number }}</p>
+            <p v-else>Transfer from {{ transaction.from_phone }}</p>
             <p class="mb-0"
                :class="[transaction.state === 'Successful' ? 'text-success' : 'text-danger']">
               {{ transaction.state }}
             </p>
           </div>
-          <div :class="[accountDetails.socialSecurityNumber !== transaction.from_social_security_number ? 'text-success' : 'text-danger']" class="h2">
-            <span v-if="accountDetails.socialSecurityNumber === transaction.from_social_security_number">-</span>
+          <div
+              :class="[accountDetails.phone !== transaction.from_phone ? 'text-success' : 'text-danger']"
+              class="h2">
+            <span v-if="accountDetails.phone === transaction.from_phone">-</span>
             {{ transaction.amount }} SEK
           </div>
         </div>
@@ -61,6 +63,8 @@ import {onMounted, ref} from 'vue';
 const transactions = ref([
   {
     id: 0,
+    from_phone: '',
+    to_phone: '',
     from_social_security_number: '',
     to_social_security_number: '',
     amount: 0,
