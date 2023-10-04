@@ -3,15 +3,15 @@
     <form class="form-control m-2" @submit.prevent="transfer" style="width: 30rem">
       <h3 class="text">Transfer Money</h3>
       <div class="mb-3 mt-4">
-        <h5 class="text">Current Balance: {{ accountDetails.balance }}</h5>
+        <h5 class="text">Current Balance: {{ accountDetails.balance }} SEK</h5>
       </div>
       <div class="mb-3 mt-4">
         <label for="exampleFormControlInput1" class="form-label">Target Account Phone Number</label>
-        <input type="text" class="form-control" name="firstName" v-model="targetPhoneNumber" required/>
+        <input type="tel" class="form-control" name="firstName" v-model="targetPhoneNumber" required/>
       </div>
       <div class="mb-3 mt-4">
         <label for="exampleFormControlInput1" class="form-label">Amount</label>
-        <input type="text" class="form-control" name="surname" v-model="amount" required/>
+        <input type="number" min="0" class="form-control" name="surname" v-model="amount" required/>
       </div>
       <button type="submit" class="btn btn-primary my-2">Transfer</button>
       <div class="alert alert-danger" role="alert" v-show="showError">
@@ -33,11 +33,13 @@
 import axios from 'axios';
 import {onBeforeMount, ref} from 'vue';
 import Modal from "@/components/Modal.vue";
+import {useRouter} from "vue-router";
 
 const targetPhoneNumber = ref('');
 const amount = ref('');
 const showError = ref(false);
 const message = ref('');
+const router = useRouter()
 
 const accountDetails = ref({
   id: 0,
@@ -90,6 +92,7 @@ function transfer() {
 
 function confirmTransfer() {
   transferModal.value.hide()
+  router.replace({name: "AccountDetails"})
 }
 </script>
     
