@@ -69,41 +69,39 @@ const showError = ref(false);
 const message = ref('');
 
 function validatePassword() {
-    if (pass1.value === pass2.value) {
-        password_equal.value = true
-    }
-    else {
-        password_equal.value = false
-    }
+    password_equal.value = pass1.value === pass2.value;
 }
 
 function account() {
-    axios({
-        method: 'post',
-        url: '/api/account',
-        data: {
-            firstName: firstName.value,
-            surname: surname.value,
-            birthday: birthday.value,
-            phone: phone.value,
-            email: email.value,
-            socialSecurityNumber: socialSecurityNumber.value,
-            password: pass1.value
-        }
-    })
-        .then(function (response) {
-            console.log(response);
-            router.push({ name: "Login", query: { accountCreated: 'true' } })
-        })
-        .catch(function (error) {
-            console.log(error);
-            showError.value = true;
-            if (error.response.status === 400) {
-                message.value = error.response.data.msg;
-            } else if (error.response.status === 500) {
-                message.value = error.response.data.msg;
-            }
-        });
+  if (!password_equal.value) {
+      return;
+  }
+  axios({
+      method: 'post',
+      url: '/api/account',
+      data: {
+          firstName: firstName.value,
+          surname: surname.value,
+          birthday: birthday.value,
+          phone: phone.value,
+          email: email.value,
+          socialSecurityNumber: socialSecurityNumber.value,
+          password: pass1.value
+      }
+  })
+      .then(function (response) {
+          console.log(response);
+          router.push({ name: "Login", query: { accountCreated: 'true' } })
+      })
+      .catch(function (error) {
+          console.log(error);
+          showError.value = true;
+          if (error.response.status === 400) {
+              message.value = error.response.data.msg;
+          } else if (error.response.status === 500) {
+              message.value = error.response.data.msg;
+          }
+      });
 }
 
 </script>
