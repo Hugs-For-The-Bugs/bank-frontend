@@ -24,23 +24,49 @@
         <input type="email" class="form-control" name="email" v-model="email" required/>
       </div>
       <button type="submit" class="btn btn-primary my-2">Update Account</button>
-      <div class="alert alert-danger" role="alert" v-show="showError">
-        {{ message }}
+      <div class="alert alert-danger" role="alert" v-show="showEditAccountError">
+        {{ editAccountResponseMessage }}
       </div>
     </form>
-    <div>
-      <div class="form-control m-2" style="width: 30rem">
-        <h3 class="text">Deactivate Account</h3>
-        <button type="button" class="btn btn-danger my-2" @click="deactivateAccount">Deactivate Account</button>
+    <div class="d-flex flex-column">
+      <div>
+        <form class="form-control m-2" @submit.prevent="changePassword" style="width: 30rem">
+          <h3 class="text">Change Password</h3>
+          <div class="mb-3">
+            <label for="exampleFormControlInput2" class="form-label">Password</label>
+            <input type="password" class="form-control" @keyup="validatePassword" name="pass1" v-model="pass1"
+                   required />
+          </div>
+          <div class="mb-3">
+            <label for="exampleFormControlInput2" class="form-label">Confirm Password</label>
+            <input type="password" class="form-control" :class="!password_equal && pass1 && pass2 ? 'border-danger' : ''"
+                   @keyup="validatePassword" name="pass2" v-model="pass2" required />
+            <p v-show="!password_equal && pass1 && pass2" class="m-0 p-0 text-danger">
+              Password does not match
+            </p>
+          </div>
+          <button type="submit" class="btn btn-primary my-2">Change Password</button>
+          <div class="alert alert-danger" role="alert" v-show="showChangePasswordError">
+            {{ changePasswordResponseMessage }}
+          </div>
+        </form>
       </div>
-      <div class="h-100"></div>
+
+      <div>
+        <div class="form-control m-2" style="width: 30rem">
+          <h3 class="text">Deactivate Account</h3>
+          <button type="button" class="btn btn-danger my-2" @click="deactivateAccount">Deactivate Account</button>
+        </div>
+        <div class="h-100"></div>
+      </div>
     </div>
+
   </div>
   <!--  Modal-->
   <Modal
       ref="editAccountModal"
-      title="Account Updated"
-      content="Your account information has been updated successfully."
+      :title="editAccountStatus"
+      :content="editAccountMessage"
       :cancellable="false"
       @confirm="confirmEditAccount"
   />
@@ -75,15 +101,25 @@ const phone = ref('');
 const email = ref('');
 const socialSecurityNumber = ref('');
 const router = useRouter();
-const showError = ref(false);
-const message = ref('');
+const showEditAccountError = ref(false);
+const editAccountResponseMessage = ref('');
+const showChangePasswordError = ref(false);
+const changePasswordResponseMessage = ref('');
 
 let editAccountModal = ref();
 let deactivateAccountModal = ref();
 let deactivateAccountCompleteModal = ref();
 
+let editAccountStatus = ref('');
+let editAccountMessage = ref('');
+
 let deactivateAccountStatus = ref('');
 let deactivateAccountMessage = ref('');
+
+let pass1 = ref('');
+let pass2 = ref('');
+let password_equal = ref(false);
+
 
 onBeforeMount(() => {
   axios({
@@ -101,11 +137,7 @@ onBeforeMount(() => {
       })
       .catch(function (error) {
         console.log(error);
-        if (error.response.status === 400) {
-          message.value = error.response.data.msg;
-        } else if (error.response.status === 500) {
-          message.value = error.response.data.msg;
-        }
+        editAccountResponseMessage.value = error.response.data.msg;
       });
 })
 
@@ -124,17 +156,46 @@ function editAccount() {
   })
       .then(function (response) {
         console.log(response);
+        editAccountStatus.value = 'Account Updated';
+        editAccountMessage.value = 'Your account information has been updated successfully.';
         editAccountModal.value.show()
       })
       .catch(function (error) {
         console.log(error);
-        showError.value = true;
-        if (error.response.status === 400) {
-          message.value = error.response.data.msg;
-        } else if (error.response.status === 500) {
-          message.value = error.response.data.msg;
-        }
+        editAccountResponseMessage.value = error.response.data.msg;
+        showEditAccountError.value = true;
       });
+}
+
+function changePassword() {
+  if (!password_equal.value) {
+    return;
+  }
+  axios({
+    method: 'put',
+    url: '/api/account/password',
+    data: {
+      password: pass1.value
+    }
+  })
+      .then(function (response) {
+        console.log(response);
+        pass1.value = '';
+        pass2.value = '';
+        password_equal.value = false;
+        editAccountStatus.value = 'Password Changed';
+        editAccountMessage.value = 'Your password has been changed successfully.';
+        editAccountModal.value.show()
+      })
+      .catch(function (error) {
+        console.log(error);
+        changePasswordResponseMessage.value = error.response.data.msg;
+        showChangePasswordError.value = true;
+      });
+}
+
+function validatePassword() {
+  password_equal.value = pass1.value === pass2.value;
 }
 
 function deactivateAccount() {
