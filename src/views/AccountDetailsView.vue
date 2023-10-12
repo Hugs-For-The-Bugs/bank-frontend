@@ -33,14 +33,18 @@
       <div class="card mb-3" v-for="transaction in transactions">
         <div class="card-body d-flex justify-content-between">
           <div>
-            <p v-if="accountDetails.socialSecurityNumber === transaction.from_phone">
+            <p class="mb-1" v-if="accountDetails.socialSecurityNumber === transaction.from_phone">
               Transfer to {{ transaction.to_phone }}
             </p>
-            <p v-else>Transfer from {{ transaction.from_phone }}</p>
+            <p class="mb-1" v-else>Transfer from {{ transaction.from_phone }}</p>
+            <p class="mb-1">
+              {{ getDateAsString(transaction.transaction_date) }}
+            </p>
             <p class="mb-0"
                :class="[transaction.state === 'Successful' ? 'text-success' : 'text-danger']">
               {{ transaction.state }}
             </p>
+
           </div>
           <div
               :class="[accountDetails.phone !== transaction.from_phone ? 'text-success' : 'text-danger']"
@@ -67,6 +71,7 @@ const transactions = ref([
     to_phone: '',
     from_social_security_number: '',
     to_social_security_number: '',
+    transaction_date: '',
     amount: 0,
     state: ''
   }
@@ -111,6 +116,12 @@ function getTransactions() {
       .catch(error => {
         console.log(error);
       })
+}
+
+function getDateAsString(string_date: string) {
+  const date = new Date(string_date)
+  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}.${date.getMinutes()}`
+
 }
 
 </script>
