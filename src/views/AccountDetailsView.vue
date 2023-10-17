@@ -47,6 +47,8 @@
               class="h2">
             <span v-if="accountDetails.phone === transaction.from_phone">-</span>
             {{ transaction.amount }} SEK
+            <h6 style=" color: black;">1% Transaction Fee: <span style="color: red;"> {{ transaction.amount*0.01 }} SEK</span></h6>
+
           </div>
         </div>
       </div>
