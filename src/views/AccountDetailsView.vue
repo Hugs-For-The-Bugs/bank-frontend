@@ -33,7 +33,7 @@
       <div class="card mb-3" v-for="transaction in transactions">
         <div class="card-body d-flex justify-content-between">
           <div>
-            <p class="mb-1" v-if="accountDetails.socialSecurityNumber === transaction.from_phone">
+            <p class="mb-1" v-if="accountDetails.phone === transaction.from_phone">
               Transfer to {{ transaction.to_phone }}
             </p>
             <p class="mb-1" v-else>Transfer from {{ transaction.from_phone }}</p>
@@ -48,7 +48,7 @@
           </div>
           <div
               :class="[accountDetails.phone !== transaction.from_phone ? 'text-success' : 'text-danger']"
-              class="h2">
+              class="h2 text-end">
             <span v-if="accountDetails.phone === transaction.from_phone">-</span>
             {{ transaction.amount }} SEK
             <h6 style=" color: black;">1% Transaction Fee: <span style="color: red;"> {{ transaction.amount*0.01 }} SEK</span></h6>
@@ -122,7 +122,9 @@ function getTransactions() {
 
 function getDateAsString(string_date: string) {
   const date = new Date(string_date)
-  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}.${date.getMinutes()}`
+  return `${date.getFullYear()}-${(((date.getMonth() + 1) < 10)?"0":"") + (date.getMonth() + 1)}-${
+    ((date.getDate() < 10)?"0":"") + date.getDate()} ${
+    ((date.getHours() < 10)?"0":"") + date.getHours()}.${((date.getMinutes() < 10)?"0":"") + date.getMinutes()}`
 
 }
 
