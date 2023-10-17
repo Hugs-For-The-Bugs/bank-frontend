@@ -13,6 +13,8 @@
         <label for="exampleFormControlInput1" class="form-label">Amount</label>
         <input type="number" min="0" class="form-control" name="surname" v-model="amount" required/>
       </div>
+      <h6 class="text" style="color: red; font-weight: normal; ">Transfer includes 1% transaction fee</h6>
+      <h6 class="text" style="font-weight: normal; ">Total amount to be deducted: <span style="color: red;"> {{ amount+(amount*0.01) }} SEK</span></h6>
       <button type="submit" class="btn btn-primary my-2">Transfer</button>
       <div class="alert alert-danger" role="alert" v-show="showError">
         Error: {{ message }}
