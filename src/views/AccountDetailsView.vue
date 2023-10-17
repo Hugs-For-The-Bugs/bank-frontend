@@ -3,7 +3,7 @@
     <div class="container-sm border-1">
       <h2 class="text-center text-bg-primary">Account Overview</h2>
       <div class="mb-3 mt-4">
-        <h3 class="text-center">Current Balance: <span class="text-primary">{{ accountDetails.balance }}</span></h3>
+        <h3 class="text-center">Current Balance: <span class="text-primary">{{ accountDetails.balance }} SEK</span></h3>
       </div>
       <div class="mb-3">
         <h4 class="text-center">{{ accountDetails.firstName }} {{ accountDetails.surname }}</h4>
